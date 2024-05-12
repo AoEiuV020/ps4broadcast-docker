@@ -8,5 +8,7 @@ RUN git clone --branch master --depth 1 https://github.com/Tilerphy/ps4broadcast
 WORKDIR /ps4broadcast/ps4broadcast
 RUN npm install
 RUN cp -R ./douyu/* node_modules
+COPY append.js ./append.js
+RUN cat append.js >> start.js
 EXPOSE 26666 1935 6667
 CMD /usr/local/bin/node start.js
