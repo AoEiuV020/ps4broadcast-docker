@@ -1,0 +1,66 @@
+# ip改成运行docker的服务器ip，
+# 然后复制到openwrt路由器上的/etc/firewall.user中，
+# 重启防火墙生效，/etc/init.d/firewall restart
+rtmpServerIp=192.168.2.45
+coverUU=/tmp/ps4b/coverUU.sh
+
+scriptName=$(basename $coverUU)
+# 检查 $coverUU 脚本是否在运行
+if pgrep -x "$scriptName" > /dev/null; then
+    echo "$scriptName is running."
+    if ps -w |grep -i "$coverUU"| grep -qm 1 "^.*$rtmpServerIp$"
+    then
+        exit 0
+    fi
+    echo ip有变，kill旧循环，
+    killall "$scriptName"
+fi
+# 检查文件是否存在
+if [ ! -f "$coverUU" ]; then
+    # 获取父目录路径
+    parent_dir=$(dirname "$coverUU")
+
+    # 创建父目录（如果不存在）
+    mkdir -p "$parent_dir"
+
+    # 使用 cat 创建文件
+    cat > "$coverUU" <<EOF
+#!/bin/bash
+rtmpServerIp="\$1"
+
+check_line_endings() {
+    local var="\$1"
+
+    # 检查第一行是否以指定字符串结尾
+    if echo "\$prerouting" | grep -qm 1 '^.*1935$'; then
+        # 检查第二行是否以指定字符串结尾
+        if echo "\$prerouting" | grep -qm 2 '^.*6667$'; then
+            return 0;
+        else
+            return 1
+        fi
+    else
+        return 1
+    fi
+}
+while true; do
+prerouting=\$(iptables -w 10 -t nat -L PREROUTING|head -4|tail -2)
+if ! check_line_endings "\$prerouting"
+then
+echo 更新置顶rtmp拦截规则，
+iptables -w 10 -t nat -D PREROUTING -p tcp --dport 1935 -j DNAT --to-destination \$rtmpServerIp:1935
+iptables -w 10 -t nat -D PREROUTING -p tcp --dport 6667 -j DNAT --to-destination \$rtmpServerIp:6667
+iptables -w 10 -t nat -I PREROUTING 1 -p tcp --dport 1935 -j DNAT --to-destination \$rtmpServerIp:1935
+iptables -w 10 -t nat -I PREROUTING 2 -p tcp --dport 6667 -j DNAT --to-destination \$rtmpServerIp:6667
+fi
+# 休息两秒
+sleep 2
+done
+EOF
+    echo "File $coverUU created successfully."
+    chmod +x "$coverUU"
+else
+    echo "File $coverUU already exists."
+fi
+echo 启动循环监控置顶rtmp拦截规则，
+"$coverUU" 192.168.2.45 &
