@@ -1,0 +1,43 @@
+name: CI
+env:
+  TZ: Asia/Shanghai
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - '**/README.md'
+      - '.github/workflows/*'
+      - '!.github/workflows/ci.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: init custom env
+      run: |
+          BUILD_NAME="${GITHUB_REPOSITORY#*/}"
+          BUILD_VERSION="$(date +'%Y%m%d%H%M%S')"
+          BUILD_NAME_WITH_VERSION="$BUILD_NAME-$BUILD_VERSION"
+          echo BUILD_NAME="$BUILD_NAME" >> .custom_env
+          echo BUILD_VERSION="$BUILD_VERSION" >> .custom_env
+          echo BUILD_NAME_WITH_VERSION="$BUILD_NAME_WITH_VERSION" >> .custom_env
+          if test ! -z "${{ secrets.DOCKERHUB_USERNAME }}" && test ! -z "${{ secrets.DOCKERHUB_TOKEN }}"
+          then
+              echo publish='true' >> $GITHUB_ENV
+          fi
+          cat .custom_env
+          cat .custom_env >> $GITHUB_ENV
+    - name: Login to DockerHub
+      if: ${{ env.publish == 'true' }}
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: docker build
+      run: ./script/build.sh
+    - name: docker push
+      if: ${{ env.publish == 'true' }}
+      run: ./script/push.sh $BUILD_VERSION
+      env:   
+        DOCKER_ID: ${{ secrets.DOCKERHUB_USERNAME }}
