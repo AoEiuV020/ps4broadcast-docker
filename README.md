@@ -1,5 +1,6 @@
 # ps4broadcast-docker
 ps4broadcast打包docker镜像，用于openwrt+uu+obs直播ps5，  
+支持架构： linux/amd64,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x  
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/aoeiuv020/ps4broadcast)](https://hub.docker.com/r/aoeiuv020/ps4broadcast)
 
@@ -7,7 +8,7 @@ ps4broadcast打包docker镜像，用于openwrt+uu+obs直播ps5，
 ```shell
 docker run --rm -p 26666:26666 -p 1935:1935 -p 6667:6667 -it --init --name ps4b aoeiuv020/ps4broadcast
 ```
-启动起来就可以了，配合obs使用什么都不要配置，并且该镜像会自动启动代理服务不需要登录26666点击，这个端口也可以省略，  
+启动起来就可以了，配合obs使用什么都不要配置，并且该镜像调整过入口会自动启动代理服务不需要登录26666点击，这个端口也可以省略，  
 如果有其他需求请移步[原项目](https://github.com/Tilerphy/ps4broadcast)，  
 
 ### 转发流到OBS
@@ -42,4 +43,4 @@ cat firewall.user >> /etc/firewall.user
 ### 延迟高画面糊
 正常，这直播就这水平，vlc看直播延迟就是这么大，  
 整体表现是不如窗口录制官方[PS Remote Play](https://remoteplay.dl.playstation.net/remoteplay/lang/cs/index.html)的，  
-唯一的优势就是，直播时游戏画面*没有顶部的正在远程提示*，
+唯一的优势就是，直播时游戏画面**没有顶部的正在远程提示**，
