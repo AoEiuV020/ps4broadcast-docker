@@ -3,11 +3,6 @@ env:
   TZ: Asia/Shanghai
 on:
   workflow_dispatch:
-  push:
-    paths-ignore:
-      - '**/README.md'
-      - '.github/workflows/*'
-      - '!.github/workflows/ci.yml'
 jobs:
   build:
     runs-on: ubuntu-latest
