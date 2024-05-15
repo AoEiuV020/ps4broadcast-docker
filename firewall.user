@@ -63,4 +63,4 @@ else
     echo "File $coverUU already exists."
 fi
 echo 启动循环监控置顶rtmp拦截规则，
-"$coverUU" 192.168.2.45 &
+"$coverUU" "$rtmpServerIp" &
