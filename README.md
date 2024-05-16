@@ -21,7 +21,8 @@ obs中添加“vlc视频源”，设置里的“播放列表”添加一条地�
 rtmp://192.168.2.45/app/live_ddddddddd_xxxxxxxxxxxxxxxxxxxxxxx
 ```
 把ps5访问目标1935和6667端口请求全部转发到192.168.2.45，  
-如果是openwrt就看[下一节](#openwrt网关)，直接使用iptables即可，否则自己想办法，  
+这一步如果是openwrt就看[下一节](#openwrt网关)，直接使用iptables即可，否则自己想办法，  
+
 最后在ps5上进入游戏后开启twitch直播，obs这边的“vlc视频源”就会播放游戏画面，  
 每次关闭游戏都会导致直播关闭，再进入游戏时要重新开启，  
 obs这边如果“vlc视频源”画面卡住了或者没有显示，可以点右边的小眼睛图标，隐藏再显示就会刷新，  
