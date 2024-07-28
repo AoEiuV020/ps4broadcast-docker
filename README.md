@@ -1,3 +1,6 @@
+# 归档，不用了
+官方ps remote play现在可以隐藏顶部提示了， 画面清晰流畅方面比直播这套好的多，
+
 # ps4broadcast-docker
 ps4broadcast打包docker镜像，用于openwrt+uu+obs直播ps5，  
 支持架构： linux/amd64,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x  
