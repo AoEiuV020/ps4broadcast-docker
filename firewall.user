@@ -63,4 +63,5 @@ else
     echo "File $coverUU already exists."
 fi
 echo 启动循环监控置顶rtmp拦截规则，
-"$coverUU" "$rtmpServerIp" &
+# 直接&运行后台进程会干扰到防火墙后续执行的脚本，原因不明，所以搞个
+sh -c "$coverUU $rtmpServerIp >/dev/null &"
