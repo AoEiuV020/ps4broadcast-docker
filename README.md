@@ -1,5 +1,10 @@
-# 归档，不用了
-官方ps remote play现在可以隐藏顶部提示了， 画面清晰流畅方面比直播这套好的多，
+# ~~归档，不用了~~
+~~官方ps remote play现在可以隐藏顶部提示了， 画面清晰流畅方面比直播这套好的多，~~
+
+# 取消归档，还是有用的
+新版mac上obs直接捕获ps remote play应用的话会同时捕获声音并影响soundSource工作，  
+而obs另一种旧版窗口捕获的话又很暗，  
+直播捕获的虽然清晰度差点，但是明暗是最好的，可能mac或者ps remote play对hdr没处理好，  
 
 # ps4broadcast-docker
 ps4broadcast打包docker镜像，用于openwrt+uu+obs直播ps5，  
